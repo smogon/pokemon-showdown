@@ -170,7 +170,7 @@ export class RandomCAPTeams extends RandomTeams {
 		return {
 			name: species.baseSpecies,
 			species: forme,
-			gender: species.baseSpecies === 'Greninja' ? 'M' : species.gender,
+			gender: species.baseSpecies === 'Greninja' ? 'M' : (species.gender || this.sample(['M', 'F'])),
 			shiny: this.randomChance(1, 1024),
 			level,
 			moves: shuffledMoves,

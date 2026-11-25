@@ -28,7 +28,7 @@ describe('Assurance', () => {
 	it(`should double the power against damaged Pokemon, not damaged slots`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'bulbasaur', level: 1, moves: ['sleeptalk'] },
-			{ species: 'landorus', moves: ['sleeptalk'] },
+			{ species: 'landorus', ability: 'shellarmor', moves: ['sleeptalk'] },
 		], [
 			{ species: 'alakazam', moves: ['psychic'] },
 			{ species: 'pawniard', moves: ['assurance'] },
