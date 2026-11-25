@@ -114,8 +114,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!this.battle.runEvent('BeforeMove', pokemon, target, move)) {
 				this.battle.runEvent('MoveAborted', pokemon, target, move);
 				this.battle.clearActiveMove(true);
-				// This is only run for sleep and fully paralysed.
-				this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
 				return;
 			}
 			if (move.beforeMoveCallback) {
@@ -136,7 +134,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			pokemon.moveUsed(move);
 			this.battle.actions.useMove(move, pokemon, { target, sourceEffect: options?.sourceEffect });
 			this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
-			if (!move.selfSwitch && pokemon.side.foe.active[0].hp) this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
 		},
 		tryMoveHit(target, pokemon, move) {
 			const positiveBoostTable = [1, 1.33, 1.66, 2, 2.33, 2.66, 3];
