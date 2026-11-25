@@ -57,8 +57,7 @@ describe('Fling', () => {
 		assert.fullHP(battle.p1.active[0]);
 	});
 
-	it.skip(`should Fling, not consume Leppa Berry when using 1 PP Leppa Berry Fling`, () => {
-		// Currently depends on RNG when it should not
+	it(`should Fling, not consume Leppa Berry when using 1 PP Leppa Berry Fling`, () => {
 		battle = common.createBattle([[
 			{ species: 'wynaut', moves: ['fling'] },
 		], [
