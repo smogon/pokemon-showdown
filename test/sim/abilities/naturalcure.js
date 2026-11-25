@@ -17,4 +17,36 @@ describe('Natural Cure', () => {
 		battle.makeChoices('move leechseed', 'move roar');
 		assert.notEqual(battle.p1.pokemon[1].status, 'par');
 	});
+
+	it('should not cure if suppressed by Gastro Acid', () => {
+		battle = common.createBattle([[
+			{ species: 'Celebi', ability: 'naturalcure', moves: ['sleeptalk'] },
+			{ species: 'Swampert', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Zapdos', moves: ['gastroacid', 'thunderwave'] },
+		]]);
+		const celebi = battle.p1.pokemon[0];
+		battle.makeChoices();
+		battle.makeChoices('move sleeptalk', 'move thunderwave');
+		assert.equal(celebi.status, 'par');
+		battle.makeChoices('switch 2', 'move thunderwave');
+		assert.equal(celebi.status, 'par');
+	});
+
+	describe('[Gen 4]', () => {
+		it('should cure even if suppressed by Gastro Acid', () => {
+			battle = common.gen(4).createBattle([[
+				{ species: 'Celebi', ability: 'naturalcure', moves: ['sleeptalk'] },
+				{ species: 'Swampert', moves: ['sleeptalk'] },
+			], [
+				{ species: 'Zapdos', moves: ['gastroacid', 'thunderwave'] },
+			]]);
+			const celebi = battle.p1.pokemon[0];
+			battle.makeChoices();
+			battle.makeChoices('move sleeptalk', 'move thunderwave');
+			assert.equal(celebi.status, 'par');
+			battle.makeChoices('switch 2', 'move thunderwave');
+			assert.equal(celebi.status, '');
+		});
+	});
 });

@@ -95,6 +95,14 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 	},
+	immunity: {
+		inherit: true,
+		onSwitchOut: undefined, // no inherit
+	},
+	insomnia: {
+		inherit: true,
+		onSwitchOut: undefined, // no inherit
+	},
 	intimidate: {
 		inherit: true,
 		onSwitchInPriority: 2, // before Trace
@@ -132,6 +140,14 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.effectState.target;
 			}
 		},
+	},
+	limber: {
+		inherit: true,
+		onSwitchOut: undefined, // no inherit
+	},
+	magmaarmor: {
+		inherit: true,
+		onSwitchOut: undefined, // no inherit
 	},
 	magnetpull: {
 		inherit: true,
@@ -263,6 +279,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 	},
+	vitalspirit: {
+		inherit: true,
+		onSwitchOut: undefined, // no inherit
+	},
 	voltabsorb: {
 		inherit: true,
 		onTryHit(target, source, move) {
@@ -273,5 +293,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return null;
 			}
 		},
+	},
+	waterveil: {
+		inherit: true,
+		onSwitchOut: undefined, // no inherit
 	},
 };
