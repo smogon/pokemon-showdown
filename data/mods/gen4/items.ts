@@ -82,6 +82,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				this.queue.insertChoice({
 					choice: 'event',
 					event: 'Custap',
+					order: action.order,
 					priority: action.priority + 0.1,
 					pokemon: action.pokemon,
 					move: action.move,
