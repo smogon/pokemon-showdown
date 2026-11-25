@@ -175,7 +175,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	pikachu: {
 		tier: "ZU",
 		doublesTier: "(DUU)",
-		natDexTier: "RU",
+		natDexTier: "NFE",
 	},
 	pikachucosplay: {
 		isNonstandard: "Past",
@@ -868,7 +868,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	chansey: {
 		tier: "PU",
 		doublesTier: "NFE",
-		natDexTier: "RU",
+		natDexTier: "NFE",
 	},
 	blissey: {
 		tier: "RU",

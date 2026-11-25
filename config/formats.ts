@@ -562,60 +562,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		itemClauseDefault: true,
 		ruleset: ['Standard Draft', 'NatDex Mod'],
-		checkCanLearn(move, species, setSources, set) {
-			if (!this.ruleTable.has('natdexmod')) return this.checkCanLearn(move, species, setSources, set);
-			const TeamValidator: typeof import('../sim/team-validator').TeamValidator =
-				require('../sim/team-validator').TeamValidator;
-			const natDex = TeamValidator.get(`gen${this.gen}nationaldexag`)
-				.checkCanLearn(move, species, this.allSources(species), set);
-			if (typeof natDex === 'string') return this.checkCanLearn(move, species, setSources, set);
-			return natDex;
-		},
-		onValidateSet(set) {
-			if (!this.ruleTable.has('natdexmod')) return;
-			const species = this.dex.species.get(set.species);
-			let tier = species.tier;
-			if (tier === 'Illegal') tier = this.dex.mod('gen9').species.get(species.name).natDexTier;
-			if (tier === 'Illegal') {
-				if (this.ruleTable.has(`+pokemon:${species.id}`)) return;
-				return [`${set.name || set.species} does not exist in the National Dex.`];
-			}
-			const requireObtainable = this.ruleTable.has('obtainable');
-			if (requireObtainable) {
-				if (species.natDexTier === "Unreleased") {
-					const basePokemon = this.toID(species.baseSpecies);
-					if (this.ruleTable.has(`+pokemon:${species.id}`) || this.ruleTable.has(`+basepokemon:${basePokemon}`) ||
-						this.ruleTable.has('+pokemontag:unobtainable')) {
-						return;
-					}
-					return [`${set.name || set.species} does not exist in the National Dex.`];
-				}
-				for (const moveid of set.moves) {
-					const move = this.dex.moves.get(moveid);
-					if (move.isNonstandard === 'Unobtainable' && move.gen === this.dex.gen) {
-						if (this.ruleTable.has(`+move:${move.id}`)) continue;
-						const problem = `${set.name}'s move ${move.name} does not exist in the National Dex.`;
-						if (this.ruleTable.has('omunobtainablemoves')) {
-							const { outOfBattleSpecies } = this.getValidationSpecies(set);
-							if (!this.omCheckCanLearn(move, outOfBattleSpecies, this.allSources(outOfBattleSpecies), set, problem)) continue;
-						}
-						return [problem];
-					}
-				}
-			}
-			// Any item that was legal in Gen 7 (Normal Gem for example) should be usable
-			if (!set.item) return;
-			let item = this.dex.items.get(set.item);
-			let gen = this.dex.gen;
-			while (item.isNonstandard && gen >= 7) {
-				item = this.dex.forGen(gen).items.get(item.id);
-				gen--;
-			}
-			if (requireObtainable && item.isNonstandard) {
-				if (this.ruleTable.has(`+item:${item.id}`)) return;
-				return [`${set.name}'s item ${item.name} does not exist in Gen ${this.dex.gen}.`];
-			}
-		},
 	},
 	{
 		name: "[Gen 8] Draft",
@@ -3839,6 +3785,15 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		section: "National Dex",
 	},
 	{
+		name: "[Gen 9 Champions] National Dex",
+		mod: 'champions',
+		ruleset: ['Standard NatDex'],
+		banlist: [
+			'ND Uber', 'ND AG', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'King\'s Rock',
+			'Quick Claw', 'Razor Fang', 'Assist', 'Baton Pass', 'Last Respects', 'Shed Tail',
+		],
+	},
+	{
 		name: "[Gen 9] National Dex",
 		mod: 'gen9',
 		ruleset: ['Standard NatDex', 'Terastal Clause'],
@@ -3850,6 +3805,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 8] National Dex",
 		mod: 'gen8',
+		searchShow: false,
 		ruleset: ['Standard NatDex', 'Dynamax Clause'],
 		banlist: ['ND Uber', 'ND AG', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Quick Claw', 'Baton Pass'],
 	},
