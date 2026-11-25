@@ -6643,7 +6643,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	terapagosstellar: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "Uber",
+		natDexTier: "Illegal",
 	},
 	pecharunt: {
 		isNonstandard: "Past",
