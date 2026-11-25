@@ -83,21 +83,21 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 		onChangeSet() {
 			const TeamValidator: typeof import('../../../sim/team-validator').TeamValidator =
 				require('../../../sim/team-validator').TeamValidator;
-			// Validate historical sources with NatDex data while retaining this format's rules.
+			// Validate historical sources with NatDex data while retaining this format's rules
 			const sourceValidator = Object.assign(Object.create(this), { dex: this.dex.mod(`gen${this.gen}`) });
 			this.validateSource = TeamValidator.prototype.validateSource.bind(sourceValidator);
 		},
 		checkCanLearn(move, species, setSources, set) {
 			if (!this.ruleTable.has('natdexmod')) return this.checkCanLearn(move, species, setSources, set);
 			if (!species.isNonstandard) {
-				// Prefer current Champions sources over more restrictive historical sources.
+				// Prefer current Champions sources over more restrictive historical sources
 				const championsSources = Utils.deepClone(setSources);
 				const championsProblem = this.checkCanLearn(move, species, championsSources, set);
 				if (!championsProblem) {
 					Object.assign(setSources, championsSources);
 					return null;
 				}
-				// Pokemon unavailable in regular NatDex only get their Champions movepool.
+				// Pokemon unavailable in regular NatDex only get their Champions movepool
 				if (this.dex.mod(`gen${this.gen}`).species.get(species.id).natDexTier === 'Illegal') {
 					return championsProblem;
 				}
