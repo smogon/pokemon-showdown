@@ -3435,11 +3435,11 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	xerneas: {
 		name: "Xerneas",
-		forme: "Active Mode",
-	},
-	xerneasneutral: {
-		name: "Xerneas-Neutral",
 		forme: "Neutral Mode",
+	},
+	xerneasactive: {
+		name: "Xerneas-Active",
+		forme: "Active Mode",
 	},
 	yveltal: {
 		name: "Yveltal",
