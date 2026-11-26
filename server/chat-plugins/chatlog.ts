@@ -646,7 +646,7 @@ export class FSLogSearcher extends Searcher {
 			const day = file.slice(0, -4);
 			const stream = Monitor.logPath(`chat/${roomid}/${month}/${file}`).createReadStream();
 			for await (const line of stream.byLine()) {
-				const parts = line.split('|').map(toID);
+				const parts = line.split('|', 3).map(toID);
 				const id = parts[2];
 				if (!id) continue;
 				if (parts[1] === 'c') {
@@ -842,7 +842,7 @@ export class RipgrepLogSearcher extends FSLogSearcher {
 				const parsed = parseInt(line);
 				results[date][user] += isNaN(parsed) ? 0 : parsed;
 			} else {
-				const parts = line?.split('|').map(toID);
+				const parts = line?.split('|', 3).map(toID);
 				if (parts?.[1] !== 'c') continue;
 				const id = parts[2];
 				if (!id) continue;
