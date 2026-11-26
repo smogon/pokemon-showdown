@@ -454,4 +454,49 @@ describe(`Emergency Exit`, () => {
 		battle.makeChoices();
 		assert.equal(battle.requestState, 'switch');
 	});
+
+	it(`should not end the battle for a normal forced switch, and the switch count should reset every turn`, () => {
+		battle = common.createBattle([[
+			{ species: 'Golisopod', ability: 'emergencyexit', moves: ['sleeptalk'], ivs: EMPTY_IVS },
+			{ species: 'Clefable', ability: 'unaware', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Raticate', ability: 'noguard', moves: ['superfang'] },
+		]]);
+		battle.makeChoices('auto', 'move superfang');
+		assert.equal(battle.requestState, 'switch');
+		assert.equal(battle.switchRequestsThisTurn, 1);
+		battle.makeChoices('switch 2', '');
+		assert.false(battle.ended);
+		assert.equal(battle.requestState, 'move');
+		assert.equal(battle.switchRequestsThisTurn, 0, 'The count should reset on a new turn');
+	});
+
+	it(`should end in a tie instead of looping forever when forced switches never stop`, () => {
+		// Shared Power gives every Pokemon Emergency Exit once Golisopod has been in. The Meowth
+		// have Regenerator and just enough HP to be healed back exactly what Stealth Rock + 3 layers
+		// of Spikes take from them on every entry, so they switch each other out without end.
+		battle = common.createBattle({ formatid: 'gen9sharedpower@@@!teampreview' }, [[
+			{ species: 'Golisopod', ability: 'emergencyexit', moves: ['sleeptalk'] },
+			{ species: 'Meowth', level: 4, ability: 'regenerator', moves: ['sleeptalk'] },
+			{ species: 'Meowth', level: 4, ability: 'regenerator', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
+		]]);
+		const foe = battle.p2.active[0];
+		battle.p1.pokemon[1].sethp(14);
+		battle.p1.pokemon[2].sethp(14);
+		battle.p1.addSideCondition('stealthrock', foe);
+		for (let i = 0; i < 3; i++) battle.p1.addSideCondition('spikes', foe);
+		battle.makeChoices('switch 2', 'auto');
+
+		// Without a limit this goes on until the player stops it
+		for (let i = 0; i < 150 && battle.requestState === 'switch'; i++) {
+			const meowth = battle.p1.pokemon.findIndex((pokemon, j) => j > 0 && pokemon.species.id === 'meowth');
+			battle.choose('p1', `switch ${meowth + 1}`);
+		}
+		assert(battle.ended, 'The battle should have ended');
+		assert.equal(battle.winner, '');
+		assert.equal(battle.turn, 1, 'The turn never got to end');
+		assert(battle.log.includes('|tie'), 'The battle should be a tie');
+	});
 });
