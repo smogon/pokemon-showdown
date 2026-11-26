@@ -103,6 +103,12 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		inherit: true,
 		onStart: undefined, // no inherit
 	},
+	partialtrappinglock: {
+		inherit: true,
+		// Gen 1 drops the lock here when the target changed, which lets the trapping move
+		// hit the new target as a fresh move. Stadium instead makes it miss in tryMoveHit.
+		onBeforeMove: undefined, // no inherit
+	},
 	partiallytrapped: {
 		name: 'partiallytrapped',
 		duration: 2,
