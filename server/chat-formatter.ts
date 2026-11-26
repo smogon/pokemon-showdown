@@ -7,6 +7,48 @@
  * @license MIT
  */
 
+/**
+ * TLDs recognized by linkRegex. Includes all country-code TLDs,
+ * plus common generic TLDs like .dev that aren't in the country
+ * list. 2-3 letter TLDs not in this list are still matched if
+ * followed by a port or path.
+ */
+const linkRegexTlds = [
+	'abudhabi', 'ac', 'ad', 'ae', 'af', 'ag', 'ai', 'al',
+	'am', 'an', 'ao', 'aq', 'ar', 'as', 'at', 'au',
+	'aw', 'ax', 'az', 'ba', 'bb', 'bd', 'be', 'bf',
+	'bg', 'bh', 'bi', 'bj', 'bl', 'bm', 'bn', 'bo',
+	'bq', 'br', 'bs', 'bt', 'bv', 'bw', 'by', 'bz',
+	'ca', 'cat', 'cc', 'cd', 'cf', 'cg', 'ch', 'ci',
+	'ck', 'cl', 'cm', 'cn', 'co', 'cr', 'cu', 'cv',
+	'cw', 'cx', 'cy', 'cz', 'de', 'dev', 'dj', 'dk',
+	'dm', 'do', 'dz', 'ec', 'ee', 'eg', 'eh', 'er',
+	'es', 'et', 'eu', 'eus', 'fi', 'fj', 'fk', 'fm',
+	'fo', 'fr', 'ga', 'gal', 'gd', 'ge', 'gf', 'gg',
+	'gh', 'gi', 'gl', 'gm', 'gn', 'gp', 'gq', 'gr',
+	'gs', 'gt', 'gu', 'gw', 'gy', 'hk', 'hm', 'hn',
+	'hr', 'ht', 'hu', 'id', 'ie', 'il', 'im', 'in',
+	'io', 'iq', 'ir', 'is', 'it', 'je', 'jm', 'jo',
+	'jp', 'ke', 'kg', 'kh', 'ki', 'km', 'kn', 'kp',
+	'kr', 'kw', 'ky', 'kz', 'la', 'lb', 'lc', 'li',
+	'lk', 'lr', 'ls', 'lt', 'lu', 'lv', 'ly', 'ma',
+	'mc', 'md', 'me', 'mf', 'mg', 'mh', 'mk', 'ml',
+	'mm', 'mn', 'mo', 'mp', 'mq', 'mr', 'ms', 'mt',
+	'mu', 'mv', 'mw', 'mx', 'my', 'mz', 'na', 'nc',
+	'ne', 'nf', 'ng', 'ni', 'nl', 'no', 'np', 'nr',
+	'nu', 'nz', 'om', 'pa', 'pe', 'pf', 'pg', 'ph',
+	'pk', 'pl', 'pm', 'pn', 'pr', 'ps', 'pt', 'pw',
+	'py', 'qa', 're', 'ro', 'rs', 'ru', 'rw', 'sa',
+	'sb', 'sc', 'sd', 'se', 'sg', 'sh', 'si', 'sj',
+	'sk', 'sl', 'sm', 'sn', 'so', 'sr', 'ss', 'st',
+	'sv', 'sx', 'sy', 'sz', 'tc', 'td', 'tf', 'tg',
+	'th', 'tj', 'tk', 'tl', 'tm', 'tn', 'to', 'tp',
+	'tr', 'tt', 'tv', 'tw', 'tz', 'ua', 'ug', 'uk',
+	'us', 'uy', 'uz', 'va', 'vc', 've', 'vg', 'vi',
+	'vn', 'vu', 'wf', 'ws', 'xk', 'ye', 'yt', 'za',
+	'zm', 'zw',
+];
+
 /*
 SOURCE FOR LINKREGEX (compile with https://regexfree.k55.io/ )
 
@@ -21,8 +63,8 @@ SOURCE FOR LINKREGEX (compile with https://regexfree.k55.io/ )
 			# Otherwise, allow any domain, but only if
 			\b [a-z0-9-]+ ( \. [a-z0-9-]+ )* \.
 			(
-				# followed either a common TLD...
-				( com? | org | net | edu | info | us | jp ) \b
+				# followed either a recognized TLD...
+				( <TLDS> ) \b
 			|
 				# or any 2-3 letter TLD followed by a port or /
 				[a-z]{2,3} (?= :[0-9] | / )
@@ -60,7 +102,12 @@ SOURCE FOR LINKREGEX (compile with https://regexfree.k55.io/ )
 	(?! [^ ]*&gt; )
 
 */
-export const linkRegex = /(?:(?:https?:\/\/[a-z0-9-]+(?:\.[a-z0-9-]+)*|www\.[a-z0-9-]+(?:\.[a-z0-9-]+)+|\b[a-z0-9-]+(?:\.[a-z0-9-]+)*\.(?:(?:com?|org|net|edu|info|us|jp)\b|[a-z]{2,3}(?=:[0-9]|\/)))(?::[0-9]+)?(?:\/(?:(?:[^\s()&<>[\]`]|&amp;|&quot;|\((?:[^\s()<>&[\]]|&amp;)*\)|\[(?:[^\s()<>&[\]]|&amp;)*])*(?:[^\s()[\]{}".,!?;:&<>*`^~\\]|\((?:[^\s()<>&[\]]|&amp;)*\)))?)?|[a-z0-9.]+@[a-z0-9-]+(?:\.[a-z0-9-]+)*\.[a-z]{2,})(?![^ ]*&gt;)/ig;
+export const linkRegex = new RegExp(
+	'(?:(?:https?://[a-z0-9-]+(?:\\.[a-z0-9-]+)*|www\\.[a-z0-9-]+(?:\\.[a-z0-9-]+)+|\\b[a-z0-9-]+(?:\\.[a-z0-9-]+)*\\.(?:(?:' +
+	linkRegexTlds.join('|') +
+	')\\b|[a-z]{2,3}(?=:[0-9]|\\/)))(?::[0-9]+)?(?:\\/(?:(?:[^\\s()&<>[\\]`]|&amp;|&quot;|\\((?:[^\\s()<>&[\\]]|&amp;)*\\)|\\[(?:[^\\s()<>&[\\]]|&amp;)*])*(?:[^\\s()[\\]{}".,!?;:&<>*`^~\\\\]|\\((?:[^\\s()<>&[\\]]|&amp;)*\\)))?)?|[a-z0-9.]+@[a-z0-9-]+(?:\\.[a-z0-9-]+)*\\.[a-z]{2,})(?![^ ]*&gt;)',
+	'ig'
+);
 
 /**
  * A span is a part of the text that's formatted. In the text:
