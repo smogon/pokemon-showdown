@@ -271,6 +271,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				} else if (pokemon.volatiles['partialtrappinglock'].locked !== target) {
 					// The target switched, therefor, you fail using wrap.
 					delete pokemon.volatiles['partialtrappinglock'];
+					this.battle.attrLastMove('[miss]');
+					this.battle.add('-miss', pokemon);
 					return false;
 				}
 			}
