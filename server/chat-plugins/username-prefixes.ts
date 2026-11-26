@@ -23,11 +23,14 @@ export class PrefixManager {
 		// ensure everything is in the right format
 		if (!Array.isArray(Config.forcedprefixes)) {
 			const convertedPrefixes = [];
+			// @ts-expect-error format check
 			for (const type in Config.forcedprefixes) {
+				// @ts-expect-error format check
 				for (const prefix of Config.forcedprefixes[type].map(toID)) {
 					convertedPrefixes.push({ type, prefix, expireAt: Date.now() + PREFIX_DURATION });
 				}
 			}
+			// @ts-expect-error format check
 			Config.forcedprefixes = convertedPrefixes;
 		}
 		if (configJustLoaded) {
@@ -36,7 +39,7 @@ export class PrefixManager {
 			}
 		}
 
-		let data: AnyObject[];
+		let data: typeof Config.forcedprefixes;
 		try {
 			data = JSON.parse(FS(PREFIXES_FILE).readSync());
 		} catch (e: any) {
