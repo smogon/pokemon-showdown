@@ -1295,15 +1295,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	firemane: {
 		isNonstandard: "Future",
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Fire') {
-				this.debug('Fire Mane boost');
-				return this.chainModify(1.5);
-			}
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(atk, attacker, defender, move) {
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
 			if (move.type === 'Fire') {
 				this.debug('Fire Mane boost');
 				return this.chainModify(1.5);
