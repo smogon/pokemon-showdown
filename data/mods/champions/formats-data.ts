@@ -1921,7 +1921,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	lugia: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	hooh: {
 		isNonstandard: "Past",
@@ -5328,7 +5328,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	pheromosa: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	xurkitree: {
 		isNonstandard: "Past",
@@ -5924,7 +5924,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	urshifu: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	urshifurapidstrike: {
 		isNonstandard: "Past",
@@ -6225,7 +6225,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	baxcaliburmega: {
 		tier: "Uber",
 		doublesTier: "DOU",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	tatsugiri: {
 		isNonstandard: "Past",
@@ -6454,7 +6454,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	ironbundle: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	ironvaliant: {
 		isNonstandard: "Past",
@@ -6469,7 +6469,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	chienpao: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	wochien: {
 		isNonstandard: "Past",
@@ -6479,7 +6479,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	chiyu: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	koraidon: {
 		isNonstandard: "Past",
