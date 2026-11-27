@@ -48,5 +48,23 @@ describe('State', () => {
 			battle.foo = new Map();
 			assert.throws(() => battle.toJSON(), /Unsupported type Map/);
 		});
+		it('should deserialize a Pokemon that transformed into a Pokemon with fewer moves', () => {
+			const battle = common.createBattle([[
+				{ species: 'Smeargle', moves: ['transform', 'feint', 'darkvoid', 'spikyshield'] },
+			], [
+				{ species: 'Talonflame', moves: ['bravebird', 'flareblitz', 'sleeptalk'] },
+			]]);
+			battle.makeChoices('move transform', 'move sleeptalk');
+			assert.equal(battle.p1.active[0].moveSlots.length, 3);
+			assert.equal(battle.p1.active[0].baseMoveSlots.length, 4);
+
+			const copy = State.deserializeBattle(State.serializeBattle(battle));
+			const smeargle = copy.p1.active[0];
+			assert.deepEqual(smeargle.moveSlots.map(moveSlot => moveSlot.id), ['bravebird', 'flareblitz', 'sleeptalk']);
+			assert.deepEqual(smeargle.baseMoveSlots.map(moveSlot => moveSlot.id), ['transform', 'feint', 'darkvoid', 'spikyshield']);
+
+			battle.destroy();
+			copy.destroy();
+		});
 	});
 });
