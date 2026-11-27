@@ -419,6 +419,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	frostbreath: {
+		inherit: true,
+		accuracy: 100,
+	},
 	furyattack: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -646,6 +650,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		isNonstandard: "Past",
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
 	},
+	metalsound: {
+		inherit: true,
+		accuracy: 100,
+	},
 	meteorassault: {
 		inherit: true,
 		basePower: 170,
@@ -842,6 +850,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	rockslide: {
+		inherit: true,
+		accuracy: 95,
+		secondary: {
+			chance: 20,
+			volatileStatus: 'flinch',
+		},
+	},
 	rockthrow: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -882,6 +898,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	scratch: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	screech: {
+		inherit: true,
+		accuracy: 100,
 	},
 	secretsword: {
 		inherit: true,
@@ -984,6 +1004,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	steameruption: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	steelwing: {
+		inherit: true,
+		accuracy: 100,
 	},
 	stomp: {
 		inherit: true,

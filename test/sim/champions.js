@@ -244,6 +244,49 @@ describe('Champions abilities', () => {
 			assert.bounded(clefable.maxhp - clefable.hp, [16, 19]);
 		});
 	});
+
+	describe('Flash Fire', () => {
+		it('should keep the boost after a Pokemon Mega Evolves', () => {
+			battle = createChampionsBattle([[
+				{ species: 'Houndoom', ability: 'flashfire', item: 'houndoominite', moves: ['willowisp', 'flamethrower'] },
+			], [
+				{ species: 'Houndoom', ability: 'earlybird', item: 'houndoominite', moves: ['willowisp', 'flamethrower'] },
+			]]);
+			const flashFire = battle.p1.active[0];
+			const control = battle.p2.active[0];
+			battle.makeChoices('move willowisp', 'move willowisp');
+			battle.makeChoices('move flamethrower mega', 'move flamethrower mega');
+
+			// Flash Fire Houndoom will deal more damage,
+			// so the control Houndoom should have less HP
+			assert.bounded(flashFire.hp, [106, 113]);
+			assert.bounded(control.hp, [84, 95]);
+		});
+	});
+
+	describe('Infiltrator', () => {
+		it('should hit through Substitute', () => {
+			battle = createChampionsBattle([[
+				{ species: 'Archaludon', ability: 'stalwart', moves: ['flashcannon'] },
+			], [
+				{ species: 'Ninetales-Alola', ability: 'snowwarning', moves: ['substitute'] },
+			]]);
+
+			battle.makeChoices('move flashcannon', 'move substitute');
+			assert.fainted(battle.p2.active[0]);
+		});
+
+		it('should not be affected by screens', () => {
+			battle = createChampionsBattle([[
+				{ species: 'Archaludon', ability: 'stalwart', moves: ['flashcannon'] },
+			], [
+				{ species: 'Ninetales-Alola', ability: 'snowwarning', moves: ['auroraveil'] },
+			]]);
+
+			battle.makeChoices('move flashcannon', 'move auroraveil');
+			assert.false.fainted(battle.p2.active[0]);
+		});
+	});
 });
 
 describe('Champions items', () => {
