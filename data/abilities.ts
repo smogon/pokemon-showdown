@@ -3867,12 +3867,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onTryEatItem(item, pokemon) {
 			this.add('-activate', pokemon, 'ability: Ripen');
 		},
-		onEatItem(item, pokemon) {
+		onEatItem(item, pokemon, source, effect) {
 			const weakenBerries = [
 				'Babiri Berry', 'Charti Berry', 'Chilan Berry', 'Chople Berry', 'Coba Berry', 'Colbur Berry', 'Haban Berry', 'Kasib Berry', 'Kebia Berry', 'Occa Berry', 'Passho Berry', 'Payapa Berry', 'Rindo Berry', 'Roseli Berry', 'Shuca Berry', 'Tanga Berry', 'Wacan Berry', 'Yache Berry',
 			];
 			// Record if the pokemon ate a berry to resist the attack
-			pokemon.abilityState.berryWeaken = weakenBerries.includes(item.name);
+			pokemon.abilityState.berryWeaken = weakenBerries.includes(item.name) && effect?.id === item.id;
 		},
 		flags: {},
 		name: "Ripen",
