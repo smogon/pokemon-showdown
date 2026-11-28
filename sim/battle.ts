@@ -32,6 +32,13 @@ export type ChannelMessages<T extends ChannelID | -1> = Record<T, string[]>;
 
 const splitRegex = /^\|split\|p([1234])\n(.*)\n(.*)|.+/gm;
 
+/**
+ * The most switch requests a single turn can make before the battle is declared a tie.
+ * Fainted Pokemon and pivot moves can't come close to this, but a repeatable forced switch
+ * (Emergency Exit / Wimp Out, healed back above 50% by Regenerator) can loop without end.
+ */
+const MAX_SWITCH_REQUESTS_PER_TURN = 100;
+
 export function extractChannelMessages<T extends ChannelID | -1>(message: string, channelIds: T[]): ChannelMessages<T> {
 	const channelIdSet = new Set(channelIds);
 	const channelMessages: ChannelMessages<ChannelID | -1> = {
@@ -150,6 +157,8 @@ export class Battle {
 
 	requestState: RequestState;
 	turn: number;
+	/** Number of switch requests made so far this turn */
+	switchRequestsThisTurn: number;
 	midTurn: boolean;
 	started: boolean;
 	ended: boolean;
@@ -240,6 +249,7 @@ export class Battle {
 
 		this.requestState = '';
 		this.turn = 0;
+		this.switchRequestsThisTurn = 0;
 		this.midTurn = false;
 		this.started = false;
 		this.ended = false;
@@ -1389,6 +1399,12 @@ export class Battle {
 	}
 
 	makeRequest(type?: RequestState) {
+		if (type === 'switch' && ++this.switchRequestsThisTurn > MAX_SWITCH_REQUESTS_PER_TURN) {
+			// The turn can never end, so there is no way for the battle to progress
+			this.add('message', `More than ${MAX_SWITCH_REQUESTS_PER_TURN} switches were forced this turn. The battle cannot progress!`);
+			this.tie();
+			return;
+		}
 		if (type) {
 			this.requestState = type;
 			for (const side of this.sides) {
@@ -1639,6 +1655,7 @@ export class Battle {
 
 	endTurn() {
 		this.turn++;
+		this.switchRequestsThisTurn = 0;
 		this.lastSuccessfulMoveThisTurn = null;
 
 		const dynamaxEnding: Pokemon[] = [];
