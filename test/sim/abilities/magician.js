@@ -20,6 +20,19 @@ describe('Magician', () => {
 		assert.equal(battle.p1.active[0].item, 'tr69');
 	});
 
+	it(`should send an |-enditem| message for the victim when stealing, like Pickpocket and Thief`, () => {
+		battle = common.createBattle([[
+			{ species: 'klefki', ability: 'magician', moves: ['flashcannon'] },
+		], [
+			{ species: 'wynaut', item: 'tr69', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices();
+		const endItem = battle.log.indexOf('|-enditem|p2a: Wynaut|TR69|[silent]|[from] ability: Magician|[of] p1a: Klefki');
+		const item = battle.log.indexOf('|-item|p1a: Klefki|TR69|[from] ability: Magician|[of] p2a: Wynaut');
+		assert(endItem >= 0, 'Magician should send |-enditem| for the victim');
+		assert(item > endItem, 'Magician should send |-item| after |-enditem|');
+	});
+
 	it(`should steal the opponents item if the target faints`, () => {
 		battle = common.createBattle([[
 			{ species: 'klefki', ability: 'magician', moves: ['flashcannon'] },
